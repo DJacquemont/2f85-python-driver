@@ -120,10 +120,15 @@ class GripperStatus:
 
 
 class Robotiq2F85Driver:
-    def __init__(self, serial_number:str, debug=False):
+    def __init__(self, serial_number:str, tty_device:Path=None, debug=False):
         self.debug = debug
-        self.device_serial_number = serial_number
-        self.tty_device = LinuxFindTTYWithSerialNumber().find(serial_number)
+
+        if tty_device is None:
+            self.device_serial_number = serial_number
+            self.tty_device = LinuxFindTTYWithSerialNumber().find(serial_number)
+        
+        else:
+            self.tty_device = tty_device
         
         if self.tty_device is None:
             raise Exception('No device with serial number {} found.'.format(serial_number))
